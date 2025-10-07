@@ -37,6 +37,14 @@ async function init() {
   `);
   modelCard.querySelector('#model').value = s.model;
 
+  const soraModelCard = el(`
+    <div class="card">
+      <div class="label">Sora Model ID (например, sy_8)</div>
+      <input id="sora-model" class="input" placeholder="sy_8" value="${s.model_id || 'sy_8'}" />
+      <div class="status" style="margin-top:6px">Используется при отправке запроса в Sora.</div>
+    </div>
+  `);
+
   const videoCard = el(`
     <div class="card">
       <div class="label">Параметры видео по умолчанию</div>
@@ -67,7 +75,7 @@ async function init() {
     </div>
   `);
 
-  root.append(tokenCard, modelCard, videoCard, saveRow);
+  root.append(tokenCard, modelCard, soraModelCard, videoCard, saveRow);
 
   saveRow.querySelector('#save').addEventListener('click', async () => {
     const hfToken = tokenCard.querySelector('#hf').value.trim();
@@ -75,7 +83,8 @@ async function init() {
     const orientation = videoCard.querySelector('#orientation').value;
     const size = videoCard.querySelector('#size').value;
     const n_frames = Number(videoCard.querySelector('#frames').value) || 300;
-    await saveSettings({ hfToken, model, orientation, size, n_frames });
+    const model_id = soraModelCard.querySelector('#sora-model').value.trim() || 'sy_8';
+    await saveSettings({ hfToken, model, orientation, size, n_frames, model_id });
     alert('Сохранено');
   });
 }

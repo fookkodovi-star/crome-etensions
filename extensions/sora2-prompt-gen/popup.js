@@ -66,6 +66,9 @@ function render() {
         </select>
         <input id="frames" class="input" type="number" min="30" max="1200" step="30" value="300" />
       </div>
+      <div class="row" style="margin-top:8px">
+        <input id="sora-model" class="input grow" placeholder="Sora model id (напр., sy_8)" />
+      </div>
     </div>
   `);
 
@@ -83,6 +86,16 @@ function render() {
   const orientation = controls.querySelector('#orientation');
   const size = controls.querySelector('#size');
   const frames = controls.querySelector('#frames');
+  const soraModel = controls.querySelector('#sora-model');
+
+  // Prefill from saved defaults
+  (async () => {
+    const s = await getSettings();
+    orientation.value = s.orientation;
+    size.value = s.size;
+    frames.value = s.n_frames || 300;
+    soraModel.value = s.model_id || 'sy_8';
+  })();
 
   async function doGenerate(mode) {
     rating.innerHTML = '';
@@ -119,7 +132,7 @@ function render() {
       orientation: orientation.value || s.orientation,
       size: size.value || s.size,
       n_frames: Number(frames.value) || s.n_frames || 300,
-      model_id: s.model_id || 'sy_8'
+      model_id: (soraModel.value || s.model_id || 'sy_8')
     });
     const res = await send('submitToSora', { payload });
     if (!res.ok) {
