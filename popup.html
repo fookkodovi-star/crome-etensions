@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sora 2 Prompt Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🎬</div>
+                <h1>Sora 2 Prompt Generator</h1>
+            </div>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Готов к работе</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Настройки токенов -->
+            <section class="settings-section" id="settingsSection">
+                <h2>⚙️ Настройки</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label for="hfToken">HuggingFace Token:</label>
+                        <div class="input-group">
+                            <input type="password" id="hfToken" placeholder="Введите ваш HF токен">
+                            <button class="btn-secondary" id="saveHfToken">Сохранить</button>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label for="modelSelect">Модель ИИ:</label>
+                        <select id="modelSelect">
+                            <option value="openai/gpt-oss-120b:fireworks-ai">GPT-OSS-120B</option>
+                            <option value="Qwen/Qwen2.5-72B-Instruct">Qwen 3</option>
+                            <option value="deepseek-ai/DeepSeek-V2.5">DeepSeek</option>
+                            <option value="gamma-ai/gamma-7b-it">Gamma</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Google OAuth для Sora 2:</label>
+                        <button class="btn-primary" id="googleAuthBtn">Войти через Google</button>
+                        <div class="auth-status" id="googleAuthStatus"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Генерация промтов -->
+            <section class="generation-section">
+                <h2>✨ Генерация промтов</h2>
+                <div class="generation-controls">
+                    <div class="input-group">
+                        <textarea id="userDescription" placeholder="Опишите желаемое видео (необязательно)"></textarea>
+                    </div>
+                    <div class="generation-buttons">
+                        <button class="btn-primary" id="generateRandomBtn">🎲 Случайный промт</button>
+                        <button class="btn-primary" id="generateCustomBtn">🎯 По описанию</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Результат генерации -->
+            <section class="result-section" id="resultSection" style="display: none;">
+                <h2>📝 Сгенерированный промт</h2>
+                <div class="prompt-display">
+                    <div class="prompt-text" id="generatedPrompt"></div>
+                    <div class="prompt-actions">
+                        <button class="btn-secondary" id="refineBtn">🔧 Доработать</button>
+                        <button class="btn-secondary" id="regenerateBtn">🔄 Перегенерировать</button>
+                        <button class="btn-success" id="approveBtn">✅ Отправить в Sora 2</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Настройки Sora 2 -->
+            <section class="sora-settings" id="soraSettings" style="display: none;">
+                <h2>🎥 Настройки Sora 2</h2>
+                <div class="sora-grid">
+                    <div class="setting-item">
+                        <label for="orientation">Ориентация:</label>
+                        <select id="orientation">
+                            <option value="portrait">Портретная</option>
+                            <option value="landscape">Альбомная</option>
+                            <option value="square">Квадратная</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="size">Размер:</label>
+                        <select id="size">
+                            <option value="small">Маленький</option>
+                            <option value="medium">Средний</option>
+                            <option value="large">Большой</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="nFrames">Количество кадров:</label>
+                        <input type="number" id="nFrames" value="300" min="100" max="1000">
+                    </div>
+                    <div class="setting-item">
+                        <label for="model">Модель Sora:</label>
+                        <select id="model">
+                            <option value="sy_8">Sora 2 (sy_8)</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- История промтов -->
+            <section class="history-section">
+                <h2>📚 История промтов</h2>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">История пуста</div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-info">
+                <span>Создано с ❤️ для креативных видео</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Модальное окно для доработки -->
+    <div class="modal" id="refineModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔧 Доработка промта</h3>
+                <button class="close-btn" id="closeRefineModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="refinePrompt" placeholder="Введите ваши пожелания для доработки промта"></textarea>
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="cancelRefine">Отмена</button>
+                    <button class="btn-primary" id="applyRefine">Применить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

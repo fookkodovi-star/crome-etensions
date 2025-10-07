@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Sora 2 Prompt Generator",
+  "version": "1.0.0",
+  "description": "Генератор креативных промтов для создания видео с помощью Sora 2",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "identity",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://huggingface.co/*",
+    "https://router.huggingface.co/*",
+    "https://sora.chatgpt.com/*",
+    "https://accounts.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Sora 2 Prompt Generator"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  }
+}
