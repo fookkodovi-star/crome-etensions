@@ -3,11 +3,13 @@ import { getSettings } from './storage.js';
 const SORA_BASE = 'https://sora.chatgpt.com';
 
 export async function ensureSoraLogin() {
-  // Check session by calling a lightweight endpoint; if unauthorized, open login
-  const me = await fetch(`${SORA_BASE}/backend/nf/me`, { credentials: 'include' }).catch(() => ({ status: 0 }));
-  if (me && me.status === 200) return true;
-  await chrome.tabs.create({ url: `${SORA_BASE}/login` });
-  throw new Error('Требуется вход в Sora 2 (Google). После входа вернитесь и повторите отправку.');
+  // Try to access drafts; if redirected or forbidden, ask user to sign in
+  const resp = await fetch(`${SORA_BASE}/drafts`, { credentials: 'include' }).catch(() => null);
+  if (resp && resp.ok && resp.url && resp.url.includes('/drafts')) {
+    return true;
+  }
+  await chrome.tabs.create({ url: `${SORA_BASE}/drafts` });
+  throw new Error('Нужно войти в Sora 2 (Google). Открыл страницу /drafts — войдите и повторите отправку.');
 }
 
 export async function submitToSora(payload) {
